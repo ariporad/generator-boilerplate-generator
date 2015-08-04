@@ -1,11 +1,10 @@
 'use strict';
 var path = require('path');
 var url = require('url');
-var https = require('https');
-var AdmZip = require('adm-zip');
 var generators = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
+var https = require('https');
 var npmName = require('npm-name');
 var superb = require('superb');
 var _ = require('lodash');
@@ -40,56 +39,6 @@ if (process.env.GITHUB_TOKEN) {
   });
 }
 
-var getRepoZip = function(repo, cb) {
-  // http://stackoverflow.com/questions/10359485/how-to-download-and-unzip-a-zip-file-in-memory-in-nodejs
-  var file_url = 'https://codeload.github.com/' + repo + '/zip/master';
-
-  https.get(file_url, function(res) {
-    var data = [], dataLen = 0;
-
-    res.on('error', console.error);
-    res.on('data', function(chunk) {
-
-      data.push(chunk);
-      dataLen += chunk.length;
-
-    }).on('end', function() {
-      var buf = new Buffer(dataLen);
-
-      for (var i = 0, len = data.length, pos = 0; i < len; i++) {
-        data[i].copy(buf, pos);
-        pos += data[i].length;
-      }
-      cb(buf);
-    });
-  });
-};
-
-function processZippedFilename(filename) {
-  var parts = filename.split('/');
-  parts.shift();
-
-  return parts.join('/');
-}
-
-// TODO: This would be a really great place to use ES6 yeild.
-function unzip(buffer, cb) {
-  var zip = new AdmZip(buffer);
-  var zipEntries = zip.getEntries();
-
-  var files = {};
-  for (var i = 0; i < zipEntries.length; i++) {
-    var entry = zipEntries[i];
-    var name = processZippedFilename(entry.entryName);
-    var text = zip.readAsText(entry);
-    if (entry.isDirectory) continue;
-    console.log(chalk.cyan('    unzip ') + name);
-    files[name] = text;
-  }
-
-  return files;
-}
-
 var extractGeneratorName = function(appname) {
   var match = appname.match(/^generator-(.+)/);
 
@@ -119,24 +68,21 @@ var githubUserInfo = function(name, cb, log) {
   });
 };
 
+var checkGithubItemExists = function(url, cb) {
+  https.get('https://github.com/' + url, function(res){
+    if (res.statusCode == 404) return cb(false);
+    else return cb(true);
+  }).on('error', cb);
+};
+
 module.exports = generators.Base.extend({
   constructor: function() {
     generators.Base.apply(this, arguments);
-
-    this.option('flat', {
-      type: Boolean,
-      required: false,
-      defaults: false,
-      desc: 'When specified, generators will be created at the top level of the project.'
-    });
   },
 
   initializing: function() {
     this.pkg = require('../package.json');
     this.currentYear = (new Date()).getFullYear();
-    this.config.set('structure', this.options.flat ? 'flat' : 'nested');
-    this.generatorsPrefix = this.options.flat ? '' : 'generators/';
-    this.appGeneratorDir = this.options.flat ? 'app' : 'generators';
   },
 
   prompting: {
@@ -151,7 +97,21 @@ module.exports = generators.Base.extend({
         {
           name: 'githubUser',
           message: 'Would you mind telling me your username on GitHub?',
-          default: 'someuser'
+          default: 'someuser',
+          validate: function (res) {
+            if (!res.match(/^[A-z\-]{4,}$/i)) {
+              return 'My apologies, but that doesn\'t appear to be a valid GitHub username';
+            }
+
+            var done = this.async();
+
+            checkGithubItemExists(res, function(res){
+              if (res === true) done(true);
+              if (res === false){
+                done('My apologies, but that doesn\'t appear to be a user on GitHub');
+              }
+            });
+          }
         },
         {
           name: 'repo',
@@ -161,8 +121,18 @@ module.exports = generators.Base.extend({
             return props.githubUser + '/boilerplate'
           },
           validate: function(res) {
-            return !!res.match(/^([A-z\-]{4,}\/[A-z\-]+)$/i) ||
-                   'My apologies, but that doesn\'t appear to be a repository';
+            if(!res.match(/^([A-z\-]{4,}\/[A-z\-]+)$/i)) {
+              return 'My apologies, but that doesn\'t appear to be a repository';
+            }
+
+            var done = this.async();
+
+            checkGithubItemExists(res, function(res){
+              if (res === true) done(true);
+              if (res === false){
+                done('My apologies, but that doesn\'t appear to be a repository on GitHub');
+              }
+            });
           }
         }
       ];
@@ -186,7 +156,7 @@ module.exports = generators.Base.extend({
           }.bind(this),
           validate: function(res) {
             return !!res.match(/^((?:generator\-)?[A-z][A-z\-]{0,201}[A-z])$/i) ||
-                   'My apologies, but that doesn\'t appear to be a valid npm ' +
+                   'My apologies, but that doesn\'t appear to be a valid ' +
                    'package name.';
           }
         },
@@ -200,11 +170,7 @@ module.exports = generators.Base.extend({
             var name = props.name;
 
             npmName(name, function(err, available) {
-              if (!available) {
-                done(true);
-              }
-
-              done(false);
+              done(!available);
             });
           }
         }
@@ -230,18 +196,8 @@ module.exports = generators.Base.extend({
   },
 
   configuring: {
-    enforceFolderName: function() {
-      if (this.props.name !==
-          _.last(this.destinationRoot().split(path.sep))) {
-        this.destinationRoot(this.props.name);
-      }
-
-      this.config.save();
-    },
-
     userInfo: function() {
       var done = this.async();
-      console.log(this.props);
       githubUserInfo(this.props.githubUser, function(res) {
         this.props.realname = res.name;
         this.props.email = res.email;
@@ -253,27 +209,9 @@ module.exports = generators.Base.extend({
 
   writing: {
     setup: function() {
-      console.log(this.props);
       for (var key in this.props) {
         this[key] = this.props[key];
       }
-    },
-
-    getGitRepo: function() {
-      var done = this.async();
-      getRepoZip(this.props.repo, function(buf) {
-        var files = unzip(buf);
-
-        for (var path in files) {
-          this.fs.write(
-            this.destinationPath(this.generatorsPrefix, 'app/templates', path),
-            files[path]);
-        }
-
-        this.files = files;
-
-        done();
-      }.bind(this));
     },
 
     projectfiles: function() {
@@ -292,19 +230,34 @@ module.exports = generators.Base.extend({
     app: function() {
       this.fs.copyTpl(
         this.templatePath('app/index.js'),
-        this.destinationPath(this.generatorsPrefix, 'app/index.js')
-      , this);
+        this.destinationPath('generators/app/index.js')
+        , this);
+
+      this.fs.copyTpl(
+        this.templatePath('getBoilerplate.js'),
+        this.destinationPath('getBoilerplate.js')
+        , this);
     },
 
     tests: function() {
       this.fs.copyTpl(
         this.templatePath('test-app.js'),
         this.destinationPath('test/test-app.js')
-      , this);
+        , this);
     },
   },
 
   install: function() {
     this.installDependencies({ bower: false });
   },
+
+  info: function() {
+    this.log(yosay('Each time you use your generator, it will fetch ' +
+                   chalk.cyan(this.props.repo) +
+                   ', and update the name and version in package.json.'));
+
+    this.log(yosay('It will also replace every instance of' +
+                   chalk.bgWhite('\n{{# name #}}\n') +
+                   'with the name of the generated app.'));
+  }
 });

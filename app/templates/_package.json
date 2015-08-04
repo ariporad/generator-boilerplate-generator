@@ -14,15 +14,18 @@
     "test": "mocha"
   },
   "files": [
-    "<%= appGeneratorDir %>"
+    "generators/app"
   ],
   "keywords": [
     "yeoman-generator"
   ],
   "dependencies": {
+    "adm-zip": "^0.4.7",
     "yeoman-generator": "^0.19.0",
     "chalk": "^1.0.0",
-    "yosay": "^1.0.2"
+    "yosay": "^1.0.2",
+    "underscore": "^1.8.3",
+    "underscore.string": "^3.0.3"
   },
   "devDependencies": {
     "mocha": "*"

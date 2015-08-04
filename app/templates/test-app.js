@@ -6,7 +6,7 @@ var helpers = require('yeoman-generator').test;
 
 describe('<%= generatorName %>:app', function () {
   before(function (done) {
-    helpers.run(path.join(__dirname, '../<%= generatorsPrefix %>app'))
+    helpers.run(path.join(__dirname, '../generators/app'))
       .withOptions({ skipInstall: true })
       .withPrompts({ someOption: true })
       .on('end', done);
