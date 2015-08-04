@@ -88,7 +88,7 @@ module.exports = generators.Base.extend({
         {
           name: 'githubUser',
           message: 'Would you mind telling me your username on GitHub?',
-          default: 'someuser',
+          default: 'octocat',
           validate: function (res) {
             if (!GitHub.validateUser(res)) {
               return 'My apologies, but that doesn\'t appear to be a valid GitHub username';
