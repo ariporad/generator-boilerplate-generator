@@ -4,13 +4,13 @@ var chalk = require('chalk');
 var yosay = require('yosay');
 var _ = require('underscore');
 var _s = require('underscore.string');
-var getBoilerplate = require('../../github');
+var GitHub = require('../../github');
 
 var repo = '<%= repo %>';
 
-function rename(file, name){
-  file
-    .replace(/({{#\s*name\s*#}})/i, name)
+function rewrite(file, name){
+  return file
+            .replace(/({{#\s*=?\s*name\s*#}})/i, name)
 }
 
 module.exports = yeoman.generators.Base.extend({
@@ -44,12 +44,12 @@ module.exports = yeoman.generators.Base.extend({
     everything: function() {
       var done = this.async();
 
-      getBoilerplate(repo, function(err, files){
+      GitHub.getRepo(repo, function(err, files){
         if (err) throw err;
 
         for (var path in files) {
           if(!files.hasOwnProperty(path)) continue;
-          this.fs.write(path, rename(files[path], this.props.name));
+          this.fs.write(path, rewrite(files[path], this.props.name));
         }
 
         done();

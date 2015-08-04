@@ -9,7 +9,7 @@ var npmName = require('npm-name');
 var superb = require('superb');
 var _ = require('lodash');
 var _s = require('underscore.string');
-var checkGithubItemExists = require('./templates/github');
+var GitHub = require('./templates/github');
 
 var proxy = process.env.http_proxy ||
             process.env.HTTP_PROXY ||
@@ -93,17 +93,14 @@ module.exports = generators.Base.extend({
           message: 'Would you mind telling me your username on GitHub?',
           default: 'someuser',
           validate: function (res) {
-            if (!res.match(/^[A-z\-]{4,}$/i)) {
+            if (!GitHub.validateUser(res)) {
               return 'My apologies, but that doesn\'t appear to be a valid GitHub username';
             }
 
             var done = this.async();
-
-            checkGithubItemExists(res, function(res){
-              if (res === false){
-                return done('My apologies, but that doesn\'t appear to be a user on GitHub');
-              }
-              done(res);
+            GitHub.checkItemExists(res, function(err, exists){
+              if (err) throw err;
+              done(exists || 'My apologies, but that doesn\'t appear to be a user on GitHub');
             });
           }
         },
@@ -115,17 +112,15 @@ module.exports = generators.Base.extend({
             return props.githubUser + '/boilerplate'
           },
           validate: function(res) {
-            if(!res.match(/^([A-z\-]{4,}\/[A-z\-]+)$/i)) {
+            if(!GitHub.validateRepo(res)) {
               return 'My apologies, but that doesn\'t appear to be a repository';
             }
 
             var done = this.async();
 
-            checkGithubItemExists(res, function(res){
-              if (res === false){
-                return done('My apologies, but that doesn\'t appear to be a repository on GitHub');
-              }
-              done(res);
+            GitHub.checkItemExists(res, function(err, exists){
+              if (err) throw err;
+              done(exists || 'My apologies, but that doesn\'t appear to be a repository on GitHub');
             });
           }
         }
@@ -228,8 +223,8 @@ module.exports = generators.Base.extend({
         , this);
 
       this.fs.copyTpl(
-        this.templatePath('getBoilerplate.js'),
-        this.destinationPath('getBoilerplate.js')
+        this.templatePath('github.js'),
+        this.destinationPath('github.js')
         , this);
     },
 
