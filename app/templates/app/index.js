@@ -9,49 +9,31 @@ module.exports = yeoman.generators.Base.extend({
 
     // Have Yeoman greet the user.
     this.log(yosay(
-      'Welcome to the <%= superb.replace('\'', '\\\'') %> ' + chalk.red('<%= generatorName %>') + ' generator!'
+      'Welcome to the ' + chalk.cyan('<%= repo %>') + ' generator!'
     ));
 
     var prompts = [{
-      type: 'confirm',
-      name: 'someOption',
-      message: 'Would you like to enable this option?',
-      default: true
+      name: 'name',
+      message: 'If I may ask, what name have you chosen for your new app?'
     }];
 
     this.prompt(prompts, function (props) {
-      this.props = props;
       // To access props later use this.props.someOption;
-
+      this.props = props;
       done();
     }.bind(this));
   },
 
   writing: {
-    app: function () {
+    everything: function() {
       this.fs.copy(
-        this.templatePath('_package.json'),
-        this.destinationPath('package.json')
-      );
-      this.fs.copy(
-        this.templatePath('_bower.json'),
-        this.destinationPath('bower.json')
+        this.templatePath('**/*'),
+        this.destinationPath()
       );
     },
 
-    projectfiles: function () {
-      this.fs.copy(
-        this.templatePath('editorconfig'),
-        this.destinationPath('.editorconfig')
-      );
-      this.fs.copy(
-        this.templatePath('jshintrc'),
-        this.destinationPath('.jshintrc')
-      );
+    install: function() {
+      this.installDependencies();
     }
-  },
-
-  install: function () {
-    this.installDependencies();
   }
 });

@@ -265,7 +265,9 @@ module.exports = generators.Base.extend({
         var files = unzip(buf);
 
         for (var path in files) {
-          this.fs.write(path, files[path]);
+          this.fs.write(
+            this.destinationPath(this.generatorsPrefix, 'app/templates', path),
+            files[path]);
         }
 
         this.files = files;
@@ -290,24 +292,16 @@ module.exports = generators.Base.extend({
     app: function() {
       this.fs.copyTpl(
         this.templatePath('app/index.js'),
-        this.destinationPath(this.generatorsPrefix, 'app/index.js'),
-        {
-          superb: superb(),
-          generatorName: _s.classify(this.generatorName)
-        }
-      );
+        this.destinationPath(this.generatorsPrefix, 'app/index.js')
+      , this);
     },
-  },
 
-  tests: function() {
-    this.fs.copyTpl(
-      this.templatePath('test-app.js'),
-      this.destinationPath('test/test-app.js'),
-      {
-        prefix: this.generatorsPrefix,
-        generatorName: this.generatorName
-      }
-    );
+    tests: function() {
+      this.fs.copyTpl(
+        this.templatePath('test-app.js'),
+        this.destinationPath('test/test-app.js')
+      , this);
+    },
   },
 
   install: function() {
