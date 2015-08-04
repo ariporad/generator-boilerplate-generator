@@ -9,6 +9,7 @@ var npmName = require('npm-name');
 var superb = require('superb');
 var _ = require('lodash');
 var _s = require('underscore.string');
+var checkGithubItemExists = require('./templates/github');
 
 var proxy = process.env.http_proxy ||
             process.env.HTTP_PROXY ||
@@ -68,13 +69,6 @@ var githubUserInfo = function(name, cb, log) {
   });
 };
 
-var checkGithubItemExists = function(url, cb) {
-  https.get('https://github.com/' + url, function(res){
-    if (res.statusCode == 404) return cb(false);
-    else return cb(true);
-  }).on('error', cb);
-};
-
 module.exports = generators.Base.extend({
   constructor: function() {
     generators.Base.apply(this, arguments);
@@ -106,10 +100,10 @@ module.exports = generators.Base.extend({
             var done = this.async();
 
             checkGithubItemExists(res, function(res){
-              if (res === true) done(true);
               if (res === false){
-                done('My apologies, but that doesn\'t appear to be a user on GitHub');
+                return done('My apologies, but that doesn\'t appear to be a user on GitHub');
               }
+              done(res);
             });
           }
         },
@@ -128,10 +122,10 @@ module.exports = generators.Base.extend({
             var done = this.async();
 
             checkGithubItemExists(res, function(res){
-              if (res === true) done(true);
               if (res === false){
-                done('My apologies, but that doesn\'t appear to be a repository on GitHub');
+                return done('My apologies, but that doesn\'t appear to be a repository on GitHub');
               }
+              done(res);
             });
           }
         }

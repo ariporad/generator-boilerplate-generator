@@ -4,7 +4,7 @@ var chalk = require('chalk');
 var yosay = require('yosay');
 var _ = require('underscore');
 var _s = require('underscore.string');
-var getBoilerplate = require('../../getBoilerplate');
+var getBoilerplate = require('../../github');
 
 var repo = '<%= repo %>';
 

@@ -64,4 +64,11 @@ module.exports._unzip = function unzip(buffer) {
   return files;
 };
 
+module.exports.checkItemExists  = function(url, cb) {
+  https.get('https://github.com/' + url, function(res){
+    if (res.statusCode == 404) return cb(false);
+    else return cb(true);
+  }).on('error', cb);
+};
+
 module.exports = module.exports.bind(module.exports);
