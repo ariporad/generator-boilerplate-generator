@@ -1,67 +1,32 @@
-# generator-generator [![Build Status](https://secure.travis-ci.org/yeoman/generator-generator.svg?branch=master)](https://travis-ci.org/yeoman/generator-generator)
+# generator-boilerplate-generator [![Build Status](https://secure.travis-ci.org/ariporad/generator-boilerplate-generator.svg?branch=master)](https://travis-ci.org/ariporad/generator-boilerplate-generator)
 
-> Generate a Yeoman generator
+> Generate a Yeoman generator based off a boilerplate repository
 
-Maintainer: [Pascal Hartig](https://github.com/passy)
+Maintainer: [Ari Porad](https://github.com/ariporad)
 
 ![Yo dawg, I heard you like generators?](http://i.imgur.com/2gqiift.jpg)
 
 
 ## Getting started
 
-- Install: `npm install -g generator-generator`
-- Run: `yo generator`
+- Install: `npm install -g generator-boilerplate-generator`
+- Run: `yo boilerplate-generator`
 
-If during generation you get an error like `API rate limit exceeded`, you need to log in to GitHub
-and [create a new API token](https://github.com/settings/tokens/new), then add:
-```bash
-export GITHUB_TOKEN='YOUR_NEW_TOKEN'
-```
-to your `.bashrc`, `.zshrc`, `.profile` or another file that is run on shell initialization. In new terminal shells
-you shouldn't see this error anymore.
+The principal behind this is that when making a complex generator that generates a whole application, it's preferable to
+have the boilerplate in a sepeate repository, and have the generator download it whenever it's needed.
 
+So, run this generator with `yo boilerplate-generator`, give it your GitHub username and the boilerplate repo, and it
+will generate a generator which when run will download the repo, and customize it.
 
-## Commands
+By default, then generator will replace every instance of `{{# name #}}` with the name of that the user had chosen for
+their generated app. The package.json will also be updated.
 
-* `yo generator` shows a wizard for generating a new generator
-* `yo generator:subgenerator NAME` generates a subgenerator with the name NAME
-
-
-## What do you get?
-
-Scaffolds out a complete project directory structure for you:
-
-    .
-    ├── generators
-    │   └── app
-    │       ├── index.js
-    │       └── templates
-    │           ├── _bower.json
-    │           ├── _package.json
-    │           ├── editorconfig
-    │           └── jshintrc
-    ├── .editorconfig
-    ├── .gitattributes
-    ├── .gitignore
-    ├── .jshintrc
-    ├── .travis.yml
-    ├── .yo-rc.json
-    ├── package.json
-    ├── README.md
-    └── test
-        └── test-app.js
-
+Of course, you can edit the generated generator, to add more options or do whatever.
 
 ## Contributing
 
-See the [contribution docs](https://github.com/yeoman/yeoman/blob/master/contributing.md).
-
-When submitting an issue, please follow [the
-guidelines](https://github.com/yeoman/yeoman/blob/master/contributing.md#issue-submission).
-Especially important is to make sure Yeoman is up-to-date, and providing the
-command or commands that cause the issue.
-
+PR's are welcome, please make sure you update the tests, and make sure it passes JSHint.
 
 ## License
 
-MIT © Pascal Hartig <phartig@rdrei.net> and other contributors
+[MIT](http://ariporad.mit-license.org). © [Ari Porad <github@ariporad.com>](mailto:github@ariporad.com).
