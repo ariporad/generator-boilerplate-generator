@@ -68,9 +68,8 @@ var getRepoZip = function(repo, cb) {
 function processZippedFilename(filename) {
   var parts = filename.split('/');
   parts.shift();
-  var newName = parts.join('/');
 
-  return newName;
+  return parts.join('/');
 }
 
 // TODO: This would be a really great place to use ES6 yeild.
