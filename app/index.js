@@ -1,12 +1,9 @@
 'use strict';
-var path = require('path');
 var url = require('url');
 var generators = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
-var https = require('https');
 var npmName = require('npm-name');
-var superb = require('superb');
 var _ = require('lodash');
 var _s = require('underscore.string');
 var GitHub = require('./templates/github');
@@ -99,7 +96,9 @@ module.exports = generators.Base.extend({
 
             var done = this.async();
             GitHub.checkItemExists(res, function(err, exists){
-              if (err) throw err;
+              if (err) {
+                throw err;
+              }
               done(exists || 'My apologies, but that doesn\'t appear to be a user on GitHub');
             });
           }
@@ -109,7 +108,7 @@ module.exports = generators.Base.extend({
           message: 'If you don\'t mind, what repository are you making a ' +
                    'generator for',
           default: function(props) {
-            return props.githubUser + '/boilerplate'
+            return props.githubUser + '/boilerplate';
           },
           validate: function(res) {
             if(!GitHub.validateRepo(res)) {
@@ -119,7 +118,9 @@ module.exports = generators.Base.extend({
             var done = this.async();
 
             GitHub.checkItemExists(res, function(err, exists){
-              if (err) throw err;
+              if (err) {
+                throw err;
+              }
               done(exists || 'My apologies, but that doesn\'t appear to be a repository on GitHub');
             });
           }
@@ -217,22 +218,16 @@ module.exports = generators.Base.extend({
     },
 
     app: function() {
-      this.fs.copyTpl(
-        this.templatePath('app/index.js'),
-        this.destinationPath('generators/app/index.js')
-        , this);
+      this.fs.copyTpl(this.templatePath('app/index.js'),
+                      this.destinationPath('generators/app/index.js'), this);
 
-      this.fs.copyTpl(
-        this.templatePath('github.js'),
-        this.destinationPath('github.js')
-        , this);
+      this.fs.copyTpl(this.templatePath('github.js'),
+                      this.destinationPath('github.js'), this);
     },
 
     tests: function() {
-      this.fs.copyTpl(
-        this.templatePath('test-app.js'),
-        this.destinationPath('test/test-app.js')
-        , this);
+      this.fs.copyTpl(this.templatePath('test-app.js'),
+                      this.destinationPath('test/test-app.js'), this);
     },
   },
 
