@@ -21,7 +21,7 @@ will generate a generator which when run will download the repo, and customize i
 By default, then generator will replace every instance of `{{# name #}}` with the name of that the user had chosen for
 their generated app. The package.json will also be updated.
 
-Of course, you can edit the generated generator, to add more options or do whatever.
+Of course, you can edit also the generated generator, to add more options or do whatever.
 
 ## Contributing
 
