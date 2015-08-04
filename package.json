@@ -1,5 +1,5 @@
 {
-  "name": "generator-generator",
+  "name": "generator-boilerplate-generator",
   "version": "0.8.1",
   "description": "Generate a Yeoman generator",
   "keywords": [
@@ -21,7 +21,9 @@
     "test": "mocha"
   },
   "dependencies": {
+    "adm-zip": "^0.4.7",
     "chalk": "^1.0.0",
+    "generator-generator": "^0.8.1",
     "github": "^0.2.1",
     "lodash": "^3.6.0",
     "npm-name": "^1.0.1",
