@@ -4,8 +4,13 @@ PRs are welcome! Please make sure to update the tests and that it passes JSHint.
 
 ---
 ## Tests
-This project uses two other repositories for testing. /ariporad/generator-boilerplate-generator-test-boilerplate
-(A boilerplate project), and /ariporad/generator-boilerplate-generator-test-generator (a known good output of the
-generated generator).
+This project uses one other repositories for testing: [/ariporad/generator-boilerplate-generator-test-boilerplate](/ariporad/generator-boilerplate-generator-test-boilerplate)
+(A boilerplate project). For testing, it generates a generator with that repo, and runs it, and compares the output
+to a target output in test/output.
 
-I know it's not great, I wanted to do it quickly. Sorry. If you really don't like it, take out a PR to fix it.
+For testing, a randomly generated name is used (generated once, not each time).
+
+The test setup is a little convoluted, because of the way yeoman works, if the generated generator is /xyz/abc,
+we have to move the /xyz/generator-<name>, empty /xyz/abc, then move /xyz/generator-<name> to /xyz/abc/generator-<name>.
+Then we can run the generated generator. This is beacuse yeoman uses the name of the folder to figure out the name of
+the generator.
