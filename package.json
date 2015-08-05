@@ -1,7 +1,6 @@
 {
   "name": "generator-boilerplate-generator",
   "description": "Generate a Yeoman generator based off a boilerplate repository",
-  "version": "0.0.1",
   "keywords": [
     "yeoman-generator",
     "generator",
