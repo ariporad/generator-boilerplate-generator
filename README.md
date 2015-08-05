@@ -1,4 +1,8 @@
-# generator-boilerplate-generator [![Build Status](https://secure.travis-ci.org/ariporad/generator-boilerplate-generator.svg?branch=master)](https://travis-ci.org/ariporad/generator-boilerplate-generator)
+# generator-boilerplate-generator
+ 
+[![Build Status](https://secure.travis-ci.org/ariporad/generator-boilerplate-generator.svg?branch=master)](https://travis-ci.org/ariporad/generator-boilerplate-generator)
+[![Dependency Status](https://david-dm.org/ariporad/generator-boilerplate-generator.svg)](https://david-dm.org/ariporad/generator-boilerplate-generator)
+[![devDependency Status](https://david-dm.org/ariporad/generator-boilerplate-generator/dev-status.svg)](https://david-dm.org/ariporad/generator-boilerplate-generator#info=devDependencies)
 
 > Generate a Yeoman generator based off a boilerplate repository
 
