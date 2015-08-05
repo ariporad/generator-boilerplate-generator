@@ -69,7 +69,7 @@ module.exports = yeoman.generators.Base.extend({
 
     this.prompt(prompts, function(props) {
       // To access props later use this.props.someOption;
-      this.props = JSON.parse('<%= JSON.stringify(props) %>');
+      this.props = JSON.parse('<%- JSON.stringify(props) %>');
       for (var key in props) {
         if (props.hasOwnProperty(key)) {
           this.props[key] = props[key];

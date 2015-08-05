@@ -28,6 +28,7 @@
     "chalk": "^1.0.0",
     "generator-generator": "^0.8.1",
     "github": "^0.2.1",
+    "jshint": "^2.8.0",
     "lodash": "^3.6.0",
     "npm": "^2.13.3",
     "npm-name": "^1.0.1",
