@@ -1,7 +1,7 @@
 {
   "name": "generator-boilerplate-generator",
-  "version": "0.8.1",
-  "description": "Generate a Yeoman generator",
+  "version": "1.0.0",
+  "description": "Generate a Yeoman generator based off a boilerplate repository",
   "keywords": [
     "yeoman-generator",
     "generator",
@@ -11,17 +11,16 @@
     "boilerplate"
   ],
   "author": {
-    "name": "Pascal Hartig",
-    "email": "phartig@rdrei.net",
-    "url": "http://yeoman.io"
+    "name": "Ari Porad",
+    "email": "ari@ariporad.com",
+    "url": "http://ariporad.com"
   },
   "main": "app/index.js",
-  "repository": "yeoman/generator-generator",
+  "repository": "https://github.com/ariporad/generator-boilerplate-generator",
   "scripts": {
-    "test": "mocha"
+    "test": "jshint; mocha"
   },
   "dependencies": {
-    "adm-zip": "^0.4.7",
     "chalk": "^1.0.0",
     "generator-generator": "^0.8.1",
     "github": "^0.2.1",
@@ -39,7 +38,6 @@
     "fs-extra": "^0.22.1",
     "mocha": "*",
     "mockery": "^1.4.0",
-    "mv": "^2.1.1",
     "npm": "^2.13.3"
   },
   "license": "MIT",
