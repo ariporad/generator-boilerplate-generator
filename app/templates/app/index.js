@@ -9,9 +9,10 @@ var GitHub = require('../../github');
 var repo = '<%= repo %>';
 var emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 
-function rewrite(file, name) {
+function rewrite(file, name, slug) {
   return file
     .replace(/({{#\s*=?\s*name\s*#}})/ig, name)
+    .replace(/({{#\s*=?\s*slug\s*#}})/ig, slug)
 }
 
 module.exports = yeoman.generators.Base.extend({
@@ -75,10 +76,11 @@ module.exports = yeoman.generators.Base.extend({
           this.props[key] = props[key];
         }
       }
+      this.props.slug = _s.slugify(this.props.name);
       this.props.githubUrl = [
         'https://github.com',
         this.props.githubUser,
-        _s.slugify(this.props.name)
+        this.props.slug,
       ].join('/');
       done();
     }.bind(this));
@@ -93,7 +95,8 @@ module.exports = yeoman.generators.Base.extend({
 
         for (var path in files) {
           if (!files.hasOwnProperty(path)) continue;
-          this.fs.write(path, rewrite(files[path], this.props.name));
+          this.fs.write(path,
+                        rewrite(files[path], this.props.name, this.props.slug));
         }
 
         done();
@@ -102,7 +105,7 @@ module.exports = yeoman.generators.Base.extend({
 
     packageJsonRename: function() {
       var pkg = this.fs.readJSON('package.json');
-      pkg.name = _s.slugify(this.props.name);
+      pkg.name = this.props.slug;
       pkg.repository.url = pkg.homepage = this.props.githubUrl;
       pkg.bugs.url = this.props.githubUrl + '/issues';
       pkg.version = '1.0.0';

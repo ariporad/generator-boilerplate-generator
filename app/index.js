@@ -241,7 +241,8 @@ module.exports = generators.Base.extend({
                    ', and update the name and version in package.json.'));
 
     this.log(yosay('It will also replace every instance of' +
-                   chalk.bgWhite('\n{{# name #}}\n') +
-                   'with the name of the generated app.'));
+                   chalk.bgWhite('\n{{# name #}}') + '\n or \n' +
+                   chalk.bgWhite('{{# slug #}}\n') +
+                   'with the name (or slug, respectively), of the generated app.'));
   }
 });
