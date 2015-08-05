@@ -1,6 +1,5 @@
 {
   "name": "generator-boilerplate-generator",
-  "version": "1.0.0",
   "description": "Generate a Yeoman generator based off a boilerplate repository",
   "keywords": [
     "yeoman-generator",
@@ -16,9 +15,13 @@
     "url": "http://ariporad.com"
   },
   "main": "app/index.js",
-  "repository": "https://github.com/ariporad/generator-boilerplate-generator",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ariporad/generator-boilerplate-generator.git"
+  },
   "scripts": {
-    "test": "jshint; mocha"
+    "test": "jshint; mocha",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "dependencies": {
     "chalk": "^1.0.0",
@@ -38,7 +41,8 @@
     "fs-extra": "^0.22.1",
     "mocha": "*",
     "mockery": "^1.4.0",
-    "npm": "^2.13.3"
+    "npm": "^2.13.3",
+    "semantic-release": "^4.0.2"
   },
   "license": "MIT",
   "files": [
