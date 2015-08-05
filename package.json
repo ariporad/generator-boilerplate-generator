@@ -26,6 +26,7 @@
     "generator-generator": "^0.8.1",
     "github": "^0.2.1",
     "lodash": "^3.6.0",
+    "npm": "^2.13.3",
     "npm-name": "^1.0.1",
     "superb": "^1.0.0",
     "underscore": "^1.8.3",
@@ -34,8 +35,12 @@
     "yosay": "^1.0.0"
   },
   "devDependencies": {
+    "chai": "^3.2.0",
+    "fs-extra": "^0.22.1",
     "mocha": "*",
-    "mockery": "^1.4.0"
+    "mockery": "^1.4.0",
+    "mv": "^2.1.1",
+    "npm": "^2.13.3"
   },
   "license": "MIT",
   "files": [

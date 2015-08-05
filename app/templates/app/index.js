@@ -11,7 +11,7 @@ var emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,
 
 function rewrite(file, name) {
   return file
-    .replace(/({{#\s*=?\s*name\s*#}})/i, name)
+    .replace(/({{#\s*=?\s*name\s*#}})/ig, name)
 }
 
 module.exports = yeoman.generators.Base.extend({
@@ -105,10 +105,11 @@ module.exports = yeoman.generators.Base.extend({
       pkg.name = _s.slugify(this.props.name);
       pkg.repository.url = pkg.homepage = this.props.githubUrl;
       pkg.bugs.url = this.props.githubUrl + '/issues';
+      pkg.version = '1.0.0';
       pkg.author = {
         name: this.props.userName,
         "email": this.props.userEmail,
-        "url": this.props.githubUrl
+        "url": "https://github.com/" + this.props.githubUser
       };
 
       this.fs.writeJSON('package.json', pkg);
