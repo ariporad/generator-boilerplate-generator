@@ -22,8 +22,9 @@ have the boilerplate in a sepeate repository, and have the generator download it
 So, run this generator with `yo boilerplate-generator`, give it your GitHub username and the boilerplate repo, and it
 will generate a generator which when run will download the repo, and customize it.
 
-By default, then generator will replace every instance of `{{# name #}}` with the name of that the user had chosen for
-their generated app. The package.json will also be updated.
+By default, then generator will replace every instance of `{{# name #}}` with the name of that the user has chosen for
+their generated app, it will also replace `{{# slug #}}` with the slug of the name that the user has chosen for their
+generated app. The package.json will also be updated (new name, URLs, author, v1.0.0).
 
 Of course, you can edit also the generated generator, to add more options or do whatever.
 
